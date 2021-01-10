@@ -6,9 +6,33 @@ using System.Threading.Tasks;
 
 namespace CloneHeroSaveGameEditor.Models
 {
-    class ScoresData
+    public class ScoresData
     {
-        private string weirdheadertodo;//not sure what this should be or represents
-        List<ScoreEntry> ScoreEntries;
+        public string Weirdheadertodo { get; set; }//not sure what this should be or represents
+        List<ScoreEntry> ScoreEntries { get; set; }
+
+        public ScoresData(List<List<byte>> listOfLines)
+        {
+            ScoreEntries = new List<ScoreEntry>();
+            Weirdheadertodo = Encoding.Default.GetString(listOfLines.First().ToArray());
+
+            foreach(var line in listOfLines.Skip(1))
+            {
+                ScoreEntries.Add(new ScoreEntry(line));
+            }
+        }
+
+        public byte[] GenerateByteData()
+        {
+            byte delimiter = 32;//todo put somewhere shared
+            var byteDataList = new List<byte>();
+            byteDataList.AddRange(Encoding.Default.GetBytes(Weirdheadertodo).ToList());
+            foreach(var scoreEntry in ScoreEntries)
+            {
+                byteDataList.Add(delimiter);
+                byteDataList.AddRange(scoreEntry.ConvertToBytesArray());
+            }
+            return byteDataList.ToArray();
+        }
     }
 }

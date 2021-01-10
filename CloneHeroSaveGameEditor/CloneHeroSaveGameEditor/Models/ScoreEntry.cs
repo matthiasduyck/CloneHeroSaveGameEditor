@@ -1,4 +1,9 @@
-﻿namespace CloneHeroSaveGameEditor.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace CloneHeroSaveGameEditor.Models
 {
     class ScoreEntry
     {
@@ -10,18 +15,39 @@
         int Percentage;//hex number at 30 representing percentage score
         bool HasCrown;//hex value at 31, looks like a bool indicating the 'crown'???
         //todo 4 hex fields I don't understand yet from 32-35, probably contains some useful data, maybe modifiers?
-        bool Score; //hex number from 36 to 39, 4 long, contains score in little endian int32
+        int Score; //hex number from 36 to 39, 4 long, contains score in little endian int32
 
 
         public byte[] ConvertToBytesArray()
         {
-            
-            return null;//todo
+            var byteDataList = new List<byte>();
+            byteDataList.AddRange(Encoding.ASCII.GetBytes(SongIdentifier).ToList());
+            byteDataList.Add(1);//todo unknown
+            byteDataList.Add(Convert.ToByte(PlayCount));
+            byteDataList.Add(0);//todo unknown
+            byteDataList.Add(0);//todo unknown
+            byteDataList.Add(0);//todo unknown
+            byteDataList.Add(0);//todo unknown
+            byteDataList.Add(Convert.ToByte(Difficulty));
+            byteDataList.Add(Convert.ToByte(Percentage));
+            byteDataList.Add(Convert.ToByte(HasCrown));
+            byteDataList.Add(0);//todo unknown
+            byteDataList.Add(0);//todo unknown
+            byteDataList.Add(0);//todo unknown
+            byteDataList.Add(0);//todo unknown
+            byteDataList.AddRange(BitConverter.GetBytes(Score));
+            return byteDataList.ToArray();
         }
 
-        public ScoreEntry(byte[] fromBytes)
+        public ScoreEntry(List<byte> fromBytes)
         {
             //todo decode frombytes to all relevant data
+            SongIdentifier = Encoding.Default.GetString(fromBytes.Take(32).ToArray());
+            PlayCount = fromBytes[33];
+            Difficulty = fromBytes[38];
+            Percentage = fromBytes[39];
+            HasCrown = fromBytes[40].Equals(1);
+            Score = BitConverter.ToInt32(fromBytes.Skip(45).Take(4).ToArray(), 0);
         }
     }
 
