@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <TextBox Name="txtScoresFile" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="NoWrap" Text="Scores.bin" VerticalAlignment="Top" Width="500" IsReadOnly="True"/>
+        <Button Name="btnSelectFile" Content="Select File" HorizontalAlignment="Left" Height="23" Margin="515,10,0,0" VerticalAlignment="Top" Width="135" Click="BtnSelectFile_Click"/>
+        <Button Name="btnRead" Content="Read" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="75" Click="BtnRead_Click"/>
+        <Button Name="btnWrite"  Content="Write" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="75" Click="BtnWrite_Click"/>
+
     </Grid>
 </Window>

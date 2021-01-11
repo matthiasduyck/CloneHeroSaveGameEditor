@@ -11,12 +11,12 @@ namespace CloneHeroSaveGameEditor.Models
         public string Weirdheadertodo { get; set; }//not sure what this should be or represents
         List<ScoreEntry> ScoreEntries { get; set; }
 
-        public ScoresData(List<List<byte>> listOfLines)
+        public ScoresData(IEnumerable<byte> header, List<List<byte>> listOfLines)
         {
             ScoreEntries = new List<ScoreEntry>();
-            Weirdheadertodo = Encoding.Default.GetString(listOfLines.First().ToArray());
+            Weirdheadertodo = Encoding.Default.GetString(header.ToArray());
 
-            foreach(var line in listOfLines.Skip(1))
+            foreach(var line in listOfLines)
             {
                 ScoreEntries.Add(new ScoreEntry(line));
             }
