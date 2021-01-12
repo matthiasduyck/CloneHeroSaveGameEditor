@@ -9,7 +9,7 @@ namespace CloneHeroSaveGameEditor.Models
     public class ScoresData
     {
         public string Weirdheadertodo { get; set; }//not sure what this should be or represents
-        List<ScoreEntry> ScoreEntries { get; set; }
+        internal List<ScoreEntry> ScoreEntries { get; set; }
 
         public ScoresData(IEnumerable<byte> header, List<List<byte>> listOfLines)
         {

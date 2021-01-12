@@ -26,6 +26,8 @@ namespace CloneHeroSaveGameEditor
         private byte[] scoresBinFile;
         private ScoresData scoresData;
         private string scoresbinFilePath;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -79,30 +81,11 @@ namespace CloneHeroSaveGameEditor
 
             }
 
-            
-            //while (scoresBinFile.Length > 0)
-            //{
-            //    if (scoresBinFile[49].Equals(delimiter))
-            //    {
-            //        //single scores
-            //        listOfLines.Add(scoresBinFile.Skip(1).Take())
-            //    }
-            //}
-
-
             return new ScoresData(header, listOfLines);//load into data structures
         }
 
         private void BtnSelectFile_Click(object sender, RoutedEventArgs e)
         {
-            //OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            //openFileDialog1.ShowDialog();
-            //openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\LocalLow\\srylain Inc_\\Clone Hero\\";
-            //openFileDialog1.Filter = "bin files (*.bin)|All files (*.*)";
-            //openFileDialog1.FilterIndex = 0;
-            //openFileDialog1.CheckFileExists = true;
-            //openFileDialog1.CheckPathExists = true;
-
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\LocalLow\\srylain Inc_\\Clone Hero\\",
@@ -130,13 +113,16 @@ namespace CloneHeroSaveGameEditor
 
         private void BtnWrite_Click(object sender, RoutedEventArgs e)
         {
-            var filepath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\LocalLow\\srylain Inc_\\Clone Hero\\scoresCOPY.bin";
+            var originalDirectoryPath = System.IO.Path.GetDirectoryName(scoresbinFilePath);
+            var filepath = originalDirectoryPath + "\\scores_modified_"+ DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss") + ".bin";
             SaveBinaryFile(scoresData.GenerateByteData(), filepath);//todo replace with scoresbinfilepath
         }
 
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
             scoresData = ReadInScoresBinFile(scoresbinFilePath);
+            //todo put in gridview
+            grdScores.ItemsSource = scoresData.ScoreEntries;
         }
     }
 }

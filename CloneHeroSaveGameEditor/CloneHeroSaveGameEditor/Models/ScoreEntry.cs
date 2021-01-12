@@ -5,38 +5,38 @@ using System.Text;
 
 namespace CloneHeroSaveGameEditor.Models
 {
-    class ScoreEntry
+    public class ScoreEntry
     {
-        string SongIdentifier;// first part of the score entry, 20 character long hex string, can be linked in the songcache.bin file to the actual file // blok(h)9F-BE length (h)20
-        byte unknown29;//todo some unknown field at 29 after identifier
-        int PlayCount;//simple hex number at 2A
+        public string SongIdentifier { get; set; }// first part of the score entry, 20 character long hex string, can be linked in the songcache.bin file to the actual file // blok(h)9F-BE length (h)20
+        public byte unknown29 { get; set; }//todo some unknown field at 29 after identifier
+        public int PlayCount { get; set; }//simple hex number at 2A
         //todo 4 hex fields I don't understand from 2B to 2E, maybe just padding???
-        byte unknown2B;
-        byte unknown2C;
-        byte unknown2D;
-        byte unknown2E;
-        int Difficulty;//hex number at 2F representing difficulty, 02=easy 03=medium
-        int Percentage;//hex number at 30 representing percentage score
-        bool HasCrown;//hex value at 31, looks like a bool indicating the 'crown'???
+        public byte unknown2B { get; set; }
+        public byte unknown2C { get; set; }
+        public byte unknown2D { get; set; }
+        public byte unknown2E { get; set; }
+        public int Difficulty { get; set; }//hex number at 2F representing difficulty, 02=easy 03=medium
+        public int Percentage { get; set; }//hex number at 30 representing percentage score
+        public bool HasCrown { get; set; }//hex value at 31, looks like a bool indicating the 'crown'???
         //todo 4 hex fields I don't understand yet from 32-35, probably contains some useful data, maybe modifiers?
-        byte unknown32;
-        byte unknown33;
-        byte unknown34;
-        byte unknown35;
-        int Score; //hex number from 36 to 39, 4 long, contains score in little endian int32
+        public byte unknown32 { get; set; }
+        public byte unknown33 { get; set; }
+        public byte unknown34 { get; set; }
+        public byte unknown35 { get; set; }
+        public int Score { get; set; } //hex number from 36 to 39, 4 long, contains score in little endian int32
 
         //bass guitar
-        bool hasBass = false;
-        byte unknown3A;
-        byte unknown3B;
-        int Difficulty2Maybe;
-        int Percentage2;
-        bool HasCrown2Maybe;
-        byte unknown3F;
-        byte unknown40;
-        byte unknown41;
-        byte unknown42;
-        int Score2;
+        public bool hasBass { get; set; }
+        public byte unknown3A { get; set; }
+        public byte unknown3B { get; set; }
+        public int Difficulty2Maybe { get; set; }
+        public int Percentage2 { get; set; }
+        public bool HasCrown2Maybe { get; set; }
+        public byte unknown3F { get; set; }
+        public byte unknown40 { get; set; }
+        public byte unknown41 { get; set; }
+        public byte unknown42 { get; set; }
+        public int Score2 { get; set; }
 
         public byte[] ConvertToBytesArray()
         {

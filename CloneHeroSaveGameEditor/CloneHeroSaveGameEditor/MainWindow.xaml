@@ -7,10 +7,29 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBox Name="txtScoresFile" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="NoWrap" Text="Scores.bin" VerticalAlignment="Top" Width="500" IsReadOnly="True"/>
-        <Button Name="btnSelectFile" Content="Select File" HorizontalAlignment="Left" Height="23" Margin="515,10,0,0" VerticalAlignment="Top" Width="135" Click="BtnSelectFile_Click"/>
-        <Button Name="btnRead" Content="Read" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="75" Click="BtnRead_Click"/>
-        <Button Name="btnWrite"  Content="Write" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="75" Click="BtnWrite_Click"/>
+        <TextBox Name="txtScoresFile" HorizontalAlignment="Stretch" Height="23" Margin="10,10,155,0" TextWrapping="NoWrap" Text="Scores file" VerticalAlignment="Top" Width="Auto" IsReadOnly="True"/>
+        <Button Name="btnSelectFile" Content="Select File" HorizontalAlignment="Right" Height="23" Margin="10,10,10,0" VerticalAlignment="Top" Width="135" Click="BtnSelectFile_Click"/>
+        <TextBox Name="txtSongCache" HorizontalAlignment="Stretch" Height="23" Margin="10,38,155,0" TextWrapping="NoWrap" Text="Song Cache file TODO" VerticalAlignment="Top" Width="Auto" IsReadOnly="True"/>
+        <Button Name="btnSelectFileSongCache"  Content="Select File TODO" HorizontalAlignment="Right" Margin="10,38,10,0" VerticalAlignment="Top" Width="135" Height="23"/>
+
+        <Button Name="btnRead" Content="Read" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Width="75" Click="BtnRead_Click"/>
+        <Button Name="btnWrite"  Content="Write" HorizontalAlignment="Left" Margin="10,10,0,10" VerticalAlignment="Bottom" Width="75" Click="BtnWrite_Click"/>
+        <DataGrid Name="grdScores" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Margin="10,91,10,35" Width="Auto" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Song Identifier" Binding="{Binding SongIdentifier}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Play Count" Binding="{Binding PlayCount}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Difficulty" Binding="{Binding Difficulty}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Percentage Score" Binding="{Binding Percentage}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Has Crown" Binding="{Binding HasCrown}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Score" Binding="{Binding Score}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Bass Percentage" Binding="{Binding Percentage2}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Bass Has Crown" Binding="{Binding HasCrown2Maybe}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Bass Score" Binding="{Binding Score2}" IsReadOnly="False"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+
 
     </Grid>
 </Window>
