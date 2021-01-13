@@ -7,6 +7,7 @@ namespace CloneHeroSaveGameEditor.Models
 {
     public class ScoreEntry
     {
+        public string SongFolderName { get; set; }
         public string SongIdentifier { get; set; }// first part of the score entry, 20 character long hex string, can be linked in the songcache.bin file to the actual file // blok(h)9F-BE length (h)20
         public byte unknown29 { get; set; }//todo some unknown field at 29 after identifier
         public int PlayCount { get; set; }//simple hex number at 2A
@@ -122,6 +123,16 @@ namespace CloneHeroSaveGameEditor.Models
 
             }
         }
+
+        public byte[] GetSongIdentifierAsBytes()
+        {
+            int NumberChars = SongIdentifier.Length;
+            byte[] bytes = new byte[NumberChars / 2];
+            for (int i = 0; i < NumberChars; i += 2)
+                bytes[i / 2] = Convert.ToByte(SongIdentifier.Substring(i, 2), 16);
+            return bytes;
+        }
+
     }
 
     

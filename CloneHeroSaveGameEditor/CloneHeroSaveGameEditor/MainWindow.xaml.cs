@@ -24,8 +24,10 @@ namespace CloneHeroSaveGameEditor
     public partial class MainWindow : Window
     {
         private byte[] scoresBinFile;
+        private byte[] songCacheBinFile;
         private ScoresData scoresData;
         private string scoresbinFilePath;
+        private string songcachebinFilePath;
 
 
         public MainWindow()
@@ -84,6 +86,12 @@ namespace CloneHeroSaveGameEditor
             return new ScoresData(header, listOfLines);//load into data structures
         }
 
+        private void ReadInSongCacheBinFile(string filename)
+        {
+            //todo make more robust
+            songCacheBinFile = LoadFile(filename);
+        }
+
         private void BtnSelectFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
@@ -121,8 +129,41 @@ namespace CloneHeroSaveGameEditor
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
             scoresData = ReadInScoresBinFile(scoresbinFilePath);
-            //todo put in gridview
+
+            if (!string.IsNullOrEmpty(songcachebinFilePath))
+            {
+                ReadInSongCacheBinFile(songcachebinFilePath);
+                scoresData.ScoreEntries.ForEach(x => x.SongFolderName = FilepathEnricher.Enrich(x.GetSongIdentifierAsBytes(), songCacheBinFile));
+            }
+            
             grdScores.ItemsSource = scoresData.ScoreEntries;
+        }
+
+        private void BtnSelectFileSongCache_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog2 = new OpenFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\LocalLow\\srylain Inc_\\Clone Hero\\",
+                Title = "Browse for songcache.bin file",
+
+                CheckFileExists = true,
+                CheckPathExists = true,
+
+                DefaultExt = "bin",
+                Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*",
+                FilterIndex = 0,
+                RestoreDirectory = true,
+
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+
+            if (openFileDialog2.ShowDialog() == true)
+            {
+                txtSongCache.Text = openFileDialog2.FileName;
+                songcachebinFilePath = openFileDialog2.FileName;
+            }
+
         }
     }
 }

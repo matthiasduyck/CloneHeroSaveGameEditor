@@ -1,22 +1,24 @@
-﻿<Window x:Class="CloneHeroSaveGameEditor.MainWindow"
+﻿
+    <Window x:Class="CloneHeroSaveGameEditor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CloneHeroSaveGameEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Clone Hero Save Game Editor" Height="450" Width="800">
     <Grid>
         <TextBox Name="txtScoresFile" HorizontalAlignment="Stretch" Height="23" Margin="10,10,155,0" TextWrapping="NoWrap" Text="Scores file" VerticalAlignment="Top" Width="Auto" IsReadOnly="True"/>
         <Button Name="btnSelectFile" Content="Select File" HorizontalAlignment="Right" Height="23" Margin="10,10,10,0" VerticalAlignment="Top" Width="135" Click="BtnSelectFile_Click"/>
-        <TextBox Name="txtSongCache" HorizontalAlignment="Stretch" Height="23" Margin="10,38,155,0" TextWrapping="NoWrap" Text="Song Cache file TODO" VerticalAlignment="Top" Width="Auto" IsReadOnly="True"/>
-        <Button Name="btnSelectFileSongCache"  Content="Select File TODO" HorizontalAlignment="Right" Margin="10,38,10,0" VerticalAlignment="Top" Width="135" Height="23"/>
+        <TextBox Name="txtSongCache" HorizontalAlignment="Stretch" Height="23" Margin="10,38,155,0" TextWrapping="NoWrap" Text="Song Cache file (optional) TODO" VerticalAlignment="Top" Width="Auto" IsReadOnly="True"/>
+        <Button Name="btnSelectFileSongCache"  Content="Select File TODO" HorizontalAlignment="Right" Margin="10,38,10,0" VerticalAlignment="Top" Width="135" Height="23" Click="BtnSelectFileSongCache_Click"/>
 
         <Button Name="btnRead" Content="Read" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Width="75" Click="BtnRead_Click"/>
         <Button Name="btnWrite"  Content="Write" HorizontalAlignment="Left" Margin="10,10,0,10" VerticalAlignment="Bottom" Width="75" Click="BtnWrite_Click"/>
         <DataGrid Name="grdScores" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Margin="10,91,10,35" Width="Auto" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Song Identifier" Binding="{Binding SongIdentifier}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Song Folder Name" Binding="{Binding SongFolderName}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Play Count" Binding="{Binding PlayCount}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Difficulty" Binding="{Binding Difficulty}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Percentage Score" Binding="{Binding Percentage}" IsReadOnly="False"/>
