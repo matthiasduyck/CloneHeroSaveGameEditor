@@ -8,19 +8,6 @@ namespace CloneHeroSaveGameEditor
 {
     static class FilepathEnricher
     {
-        public static int SinglePatternAt(byte[] source, byte[] pattern)
-        {
-            for (int i = source.Length; i > 0; i--)
-            {
-                if (source.Skip(i).Take(pattern.Length).SequenceEqual(pattern))
-                {
-                    return i;
-                }
-            }
-            return -1;//todo
-        }
-
-
         public static int Locate(this byte[] self, byte[] candidate)
         {
             if (IsEmptyLocate(self, candidate))

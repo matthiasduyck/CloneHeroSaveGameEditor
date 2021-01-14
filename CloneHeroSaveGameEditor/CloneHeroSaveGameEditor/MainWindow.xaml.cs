@@ -28,34 +28,48 @@ namespace CloneHeroSaveGameEditor
         private ScoresData scoresData;
         private string scoresbinFilePath;
         private string songcachebinFilePath;
+        private static Thickness grdMaximisedMargin = new Thickness(10, 91, 10, 35);
+        private static Thickness grdMinimisedMargin = new Thickness(10, 91, 10, 115);
 
+        internal Logger logger;
 
         public MainWindow()
         {
             InitializeComponent();
-
+            logger = new Logger(txtConsole);
             //todo add manual button loading options
 
-
-            
-
-
-            
+            grdScores.Margin = grdMinimisedMargin;
         }
 
         private byte[] LoadFile(string fileName)
         {
-            return File.ReadAllBytes(fileName);
+            if (string.IsNullOrEmpty(fileName))
+            {
+                logger.Log("ERROR - File path is empty");
+                return null;
+            }
+            logger.Log("Reading: " + fileName);
+            var bytes = File.ReadAllBytes(fileName);
+            logger.Log("Finished reading: " + fileName);
+            return bytes;
         }
 
         private void SaveBinaryFile(byte[] data, string fileName)
         {
-            File.WriteAllBytes(fileName, data); // Requires System.IO
+            logger.Log("Writing binary file: " + fileName);
+            File.WriteAllBytes(fileName, data);
+            logger.Log("File written: " + fileName);
         }
 
         private ScoresData ReadInScoresBinFile(string filename){
             //todo make more robust
             scoresBinFile = LoadFile(filename);
+            if (scoresBinFile == null)
+            {
+                logger.Log("ERROR - Could not read scores file");
+                return null;
+            }
 
             //load in vars
             byte delimiter = 32;//todo put somewhere shared
@@ -83,16 +97,20 @@ namespace CloneHeroSaveGameEditor
 
             }
 
-            return new ScoresData(header, listOfLines);//load into data structures
+            return new ScoresData(header, listOfLines, logger);//load into data structures
         }
 
         private void ReadInSongCacheBinFile(string filename)
         {
             //todo make more robust
             songCacheBinFile = LoadFile(filename);
+            if (songCacheBinFile == null)
+            {
+                logger.Log("ERROR - Could not read song cache file");
+            }
         }
 
-        private void BtnSelectFile_Click(object sender, RoutedEventArgs e)
+        private void BtnSelectScoresFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
@@ -121,27 +139,43 @@ namespace CloneHeroSaveGameEditor
 
         private void BtnWrite_Click(object sender, RoutedEventArgs e)
         {
-            var originalDirectoryPath = System.IO.Path.GetDirectoryName(scoresbinFilePath);
-            var filepath = originalDirectoryPath + "\\scores_modified_"+ DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss") + ".bin";
-            SaveBinaryFile(scoresData.GenerateByteData(), filepath);//todo replace with scoresbinfilepath
+            if (scoresData == null)
+            {
+                logger.Log("ERROR - Scores Data is empty, read it in from a file first");
+            }
+            else
+            {
+                var originalDirectoryPath = System.IO.Path.GetDirectoryName(scoresbinFilePath);
+                var filepath = originalDirectoryPath + "\\scores_modified_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss") + ".bin";
+                logger.Log("Writing out to: " + filepath);
+                SaveBinaryFile(scoresData.GenerateByteData(), filepath);//todo replace with scoresbinfilepath
+            }
         }
 
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
             scoresData = ReadInScoresBinFile(scoresbinFilePath);
-
-            if (!string.IsNullOrEmpty(songcachebinFilePath))
+            if (scoresData == null)
             {
-                ReadInSongCacheBinFile(songcachebinFilePath);
-                scoresData.ScoreEntries.ForEach(x => x.SongFolderName = FilepathEnricher.Enrich(x.GetSongIdentifierAsBytes(), songCacheBinFile));
+                logger.Log("ERROR - Scores Data is empty");
             }
-            
-            grdScores.ItemsSource = scoresData.ScoreEntries;
+            else
+            {
+                if (!string.IsNullOrEmpty(songcachebinFilePath))
+                {
+                    ReadInSongCacheBinFile(songcachebinFilePath);
+                    logger.Log("Enriching song entries with folder path names");
+                    scoresData.ScoreEntries.ForEach(x => x.SongFolderName = FilepathEnricher.Enrich(x.GetSongIdentifierAsBytes(), songCacheBinFile));
+                    logger.Log("Finished enriching song entries with folder path names");
+                }
+
+                grdScores.ItemsSource = scoresData.ScoreEntries;
+            }            
         }
 
         private void BtnSelectFileSongCache_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog2 = new OpenFileDialog
+            OpenFileDialog openFileDialogSelectFileSongCache = new OpenFileDialog
             {
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\LocalLow\\srylain Inc_\\Clone Hero\\",
                 Title = "Browse for songcache.bin file",
@@ -158,12 +192,24 @@ namespace CloneHeroSaveGameEditor
                 ShowReadOnly = true
             };
 
-            if (openFileDialog2.ShowDialog() == true)
+            if (openFileDialogSelectFileSongCache.ShowDialog() == true)
             {
-                txtSongCache.Text = openFileDialog2.FileName;
-                songcachebinFilePath = openFileDialog2.FileName;
+                txtSongCache.Text = openFileDialogSelectFileSongCache.FileName;
+                songcachebinFilePath = openFileDialogSelectFileSongCache.FileName;
             }
 
+        }
+
+        private void BtnToggleConsole_Click(object sender, RoutedEventArgs e)
+        {
+            if (grdScores.Margin.Equals(grdMaximisedMargin))
+            {
+                grdScores.Margin = grdMinimisedMargin;
+            }
+            else
+            {
+                grdScores.Margin = grdMaximisedMargin;
+            }
         }
     }
 }

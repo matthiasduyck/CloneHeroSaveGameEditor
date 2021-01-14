@@ -14,7 +14,9 @@ namespace CloneHeroSaveGameEditor.Models
         //todo 4 hex fields I don't understand from 2B to 2E, maybe just padding???
         public byte unknown2B { get; set; }
         public byte unknown2C { get; set; }
-        public byte unknown2D { get; set; }
+        //public byte ScoreType { get; set; } //represents score type(guitar/bass/...) 
+        public string ScoreType { get; set; }
+
         public byte unknown2E { get; set; }
         public int Difficulty { get; set; }//hex number at 2F representing difficulty, 02=easy 03=medium
         public int Percentage { get; set; }//hex number at 30 representing percentage score
@@ -27,17 +29,32 @@ namespace CloneHeroSaveGameEditor.Models
         public int Score { get; set; } //hex number from 36 to 39, 4 long, contains score in little endian int32
 
         //bass guitar
-        public bool hasBass { get; set; }
-        public byte unknown3A { get; set; }
+        public bool hasSecondScore { get; set; }
+        
+        public string ScoreType2 { get; set; }
         public byte unknown3B { get; set; }
-        public int Difficulty2Maybe { get; set; }
+        public int Difficulty2 { get; set; }
         public int Percentage2 { get; set; }
-        public bool HasCrown2Maybe { get; set; }
+        public bool HasCrown2 { get; set; }
         public byte unknown3F { get; set; }
         public byte unknown40 { get; set; }
         public byte unknown41 { get; set; }
         public byte unknown42 { get; set; }
         public int Score2 { get; set; }
+
+        //third score?
+        public bool hasThirdScore { get; set; }
+
+        public string ScoreType3 { get; set; }
+        public byte unknown3_2 { get; set; }
+        public int Difficulty3 { get; set; }
+        public int Percentage3 { get; set; }
+        public bool HasCrown3 { get; set; }
+        public byte unknown3_3 { get; set; }
+        public byte unknown3_4 { get; set; }
+        public byte unknown3_5 { get; set; }
+        public byte unknown3_6 { get; set; }
+        public int Score3 { get; set; }
 
         public byte[] ConvertToBytesArray()
         {
@@ -47,7 +64,7 @@ namespace CloneHeroSaveGameEditor.Models
             byteDataList.Add(Convert.ToByte(PlayCount));
             byteDataList.Add(unknown2B);//todo unknown
             byteDataList.Add(unknown2C);//todo unknown
-            byteDataList.Add(unknown2D);//todo unknown
+            byteDataList.Add(ScoreStringToBytes(ScoreType));//todo unknown
             byteDataList.Add(unknown2E);//todo unknown
             byteDataList.Add(Convert.ToByte(Difficulty));
             byteDataList.Add(Convert.ToByte(Percentage));
@@ -58,18 +75,31 @@ namespace CloneHeroSaveGameEditor.Models
             byteDataList.Add(unknown35);//todo unknown
             byteDataList.AddRange(BitConverter.GetBytes(Score));
 
-            if (hasBass)
+            if (hasSecondScore)
             {
-                byteDataList.Add(unknown3A);//todo unknown
+                byteDataList.Add(ScoreStringToBytes(ScoreType2));//todo unknown
                 byteDataList.Add(unknown3B);//todo unknown
-                byteDataList.Add(Convert.ToByte(Difficulty2Maybe));
+                byteDataList.Add(Convert.ToByte(Difficulty2));
                 byteDataList.Add(Convert.ToByte(Percentage2));
-                byteDataList.Add(Convert.ToByte(HasCrown2Maybe));
+                byteDataList.Add(Convert.ToByte(HasCrown2));
                 byteDataList.Add(unknown3F);//todo unknown
                 byteDataList.Add(unknown40);//todo unknown
                 byteDataList.Add(unknown41);//todo unknown
                 byteDataList.Add(unknown42);//todo unknown
                 byteDataList.AddRange(BitConverter.GetBytes(Score2));
+            }
+            if (hasThirdScore)
+            {
+                byteDataList.Add(ScoreStringToBytes(ScoreType3));//todo unknown
+                byteDataList.Add(unknown3_2);//todo unknown
+                byteDataList.Add(Convert.ToByte(Difficulty3));
+                byteDataList.Add(Convert.ToByte(Percentage3));
+                byteDataList.Add(Convert.ToByte(HasCrown3));
+                byteDataList.Add(unknown3_3);//todo unknown
+                byteDataList.Add(unknown3_4);//todo unknown
+                byteDataList.Add(unknown3_5);//todo unknown
+                byteDataList.Add(unknown3_6);//todo unknown
+                byteDataList.AddRange(BitConverter.GetBytes(Score3));
             }
             
 
@@ -84,7 +114,7 @@ namespace CloneHeroSaveGameEditor.Models
             PlayCount = fromBytes[33];
             unknown2B = fromBytes[34];
             unknown2C = fromBytes[35];
-            unknown2D = fromBytes[36];
+            ScoreType =  ScoreTypeBytesToString(fromBytes[36]);
             unknown2E = fromBytes[37];
             Difficulty = fromBytes[38];
             Percentage = fromBytes[39];
@@ -103,14 +133,14 @@ namespace CloneHeroSaveGameEditor.Models
             //looks like we have more than just the lead
             if (fromBytes.Count > 49)
             {
-                hasBass = true;
+                hasSecondScore = true;
 
-                unknown3A = fromBytes[49];
+                ScoreType2 = ScoreTypeBytesToString(fromBytes[49]);//score type (guitar/bass/etc)
                 unknown3B = fromBytes[50];
-                Difficulty2Maybe = fromBytes[51];
+                Difficulty2 = fromBytes[51];
                 Percentage2 = fromBytes[52];
-                HasCrown2Maybe = fromBytes[53].Equals(1);
-                unknown3F = fromBytes[54];
+                HasCrown2 = fromBytes[53].Equals(1);
+                unknown3F = fromBytes[54];//maybe speed???
                 unknown40 = fromBytes[55];
                 unknown41 = fromBytes[56];
                 unknown42 = fromBytes[57];
@@ -120,7 +150,18 @@ namespace CloneHeroSaveGameEditor.Models
             //looks like we have even more scores
             if (fromBytes.Count > 62)
             {
+                hasThirdScore = true;
 
+                ScoreType3 = ScoreTypeBytesToString(fromBytes[62]);
+                unknown3_2 = fromBytes[63];
+                Difficulty3 = fromBytes[64];
+                Percentage3 = fromBytes[65];
+                HasCrown3 = fromBytes[66].Equals(1);
+                unknown3_3 = fromBytes[67];
+                unknown3_4 = fromBytes[68];
+                unknown3_5 = fromBytes[69];
+                unknown3_6 = fromBytes[70];
+                Score3 = BitConverter.ToInt32(fromBytes.Skip(71).Take(4).ToArray(), 0);
             }
         }
 
@@ -133,7 +174,48 @@ namespace CloneHeroSaveGameEditor.Models
             return bytes;
         }
 
-    }
+        //0 = guitar, 8 = bass?, 7 = keys?, 2 = ???
+        public static string ScoreTypeBytesToString(byte score)
+        {
+            var result = Convert.ToString(score);
+            switch (score)
+            {
+                case 0:
+                    result = "guitar";
+                    break;
+                case 8:
+                    result = "bass";
+                    break;
+                case 7:
+                    result = "keys";
+                    break;
+                default:
+                    break;
+            }
 
-    
+            return result;
+        }
+
+        public static byte ScoreStringToBytes(string score)
+        {
+            byte result;
+            switch (score)
+            {
+                case "guitar":
+                    result = 0;
+                    break;
+                case "bass":
+                    result = 8;
+                    break;
+                case "keys":
+                    result = 7;
+                    break;
+                default:
+                    result = Convert.ToByte(score);
+                    break;
+            }
+
+            return result;
+        }
+    }
 }

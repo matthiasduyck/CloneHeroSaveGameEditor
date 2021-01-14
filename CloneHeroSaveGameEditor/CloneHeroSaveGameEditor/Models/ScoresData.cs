@@ -11,10 +11,14 @@ namespace CloneHeroSaveGameEditor.Models
         public string Weirdheadertodo { get; set; }//not sure what this should be or represents
         internal List<ScoreEntry> ScoreEntries { get; set; }
 
-        public ScoresData(IEnumerable<byte> header, List<List<byte>> listOfLines)
+        private Logger Logger;
+
+        public ScoresData(IEnumerable<byte> header, List<List<byte>> listOfLines, Logger logger)
         {
+            Logger = logger;
             ScoreEntries = new List<ScoreEntry>();
             Weirdheadertodo = Encoding.Default.GetString(header.ToArray());
+            
 
             foreach(var line in listOfLines)
             {
@@ -24,6 +28,7 @@ namespace CloneHeroSaveGameEditor.Models
 
         public byte[] GenerateByteData()
         {
+            Logger.Log("Generating bytes");
             byte delimiter = 32;//todo put somewhere shared
             var byteDataList = new List<byte>();
             byteDataList.AddRange(Encoding.Default.GetBytes(Weirdheadertodo).ToList());
@@ -32,6 +37,7 @@ namespace CloneHeroSaveGameEditor.Models
                 byteDataList.Add(delimiter);
                 byteDataList.AddRange(scoreEntry.ConvertToBytesArray());
             }
+            Logger.Log("Bytes generated");
             return byteDataList.ToArray();
         }
     }
