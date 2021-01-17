@@ -18,25 +18,25 @@ namespace CloneHeroSaveGameEditor.Models
         public string ScoreType { get; set; }
 
         public byte unknown2E { get; set; }
-        public int Difficulty { get; set; }//hex number at 2F representing difficulty, 02=easy 03=medium
+        public string Difficulty { get; set; }//hex number at 2F representing difficulty, 00=expert, 01 = hard, 02=medium, 03=easy, 
         public int Percentage { get; set; }//hex number at 30 representing percentage score
         public bool HasCrown { get; set; }//hex value at 31, looks like a bool indicating the 'crown'???
         //todo 4 hex fields I don't understand yet from 32-35, probably contains some useful data, maybe modifiers?
-        public byte unknown32 { get; set; }
+        public int NoteSpeed { get; set; }
         public byte unknown33 { get; set; }
         public byte unknown34 { get; set; }
         public byte unknown35 { get; set; }
         public int Score { get; set; } //hex number from 36 to 39, 4 long, contains score in little endian int32
 
-        //bass guitar
+        //second score
         public bool hasSecondScore { get; set; }
         
         public string ScoreType2 { get; set; }
         public byte unknown3B { get; set; }
-        public int Difficulty2 { get; set; }
+        public string Difficulty2 { get; set; }
         public int Percentage2 { get; set; }
         public bool HasCrown2 { get; set; }
-        public byte unknown3F { get; set; }
+        public int NoteSpeed2 { get; set; }
         public byte unknown40 { get; set; }
         public byte unknown41 { get; set; }
         public byte unknown42 { get; set; }
@@ -47,10 +47,10 @@ namespace CloneHeroSaveGameEditor.Models
 
         public string ScoreType3 { get; set; }
         public byte unknown3_2 { get; set; }
-        public int Difficulty3 { get; set; }
+        public string Difficulty3 { get; set; }
         public int Percentage3 { get; set; }
         public bool HasCrown3 { get; set; }
-        public byte unknown3_3 { get; set; }
+        public int NoteSpeed3 { get; set; }
         public byte unknown3_4 { get; set; }
         public byte unknown3_5 { get; set; }
         public byte unknown3_6 { get; set; }
@@ -66,10 +66,10 @@ namespace CloneHeroSaveGameEditor.Models
             byteDataList.Add(unknown2C);//todo unknown
             byteDataList.Add(ScoreStringToBytes(ScoreType));//todo unknown
             byteDataList.Add(unknown2E);//todo unknown
-            byteDataList.Add(Convert.ToByte(Difficulty));
+            byteDataList.Add(DifficultyStringToBytes(Difficulty));
             byteDataList.Add(Convert.ToByte(Percentage));
             byteDataList.Add(Convert.ToByte(HasCrown));
-            byteDataList.Add(unknown32);//todo unknown
+            byteDataList.Add(Convert.ToByte(NoteSpeed));
             byteDataList.Add(unknown33);//todo unknown
             byteDataList.Add(unknown34);//todo unknown
             byteDataList.Add(unknown35);//todo unknown
@@ -79,10 +79,10 @@ namespace CloneHeroSaveGameEditor.Models
             {
                 byteDataList.Add(ScoreStringToBytes(ScoreType2));//todo unknown
                 byteDataList.Add(unknown3B);//todo unknown
-                byteDataList.Add(Convert.ToByte(Difficulty2));
+                byteDataList.Add(DifficultyStringToBytes(Difficulty2));
                 byteDataList.Add(Convert.ToByte(Percentage2));
                 byteDataList.Add(Convert.ToByte(HasCrown2));
-                byteDataList.Add(unknown3F);//todo unknown
+                byteDataList.Add(Convert.ToByte(NoteSpeed2));
                 byteDataList.Add(unknown40);//todo unknown
                 byteDataList.Add(unknown41);//todo unknown
                 byteDataList.Add(unknown42);//todo unknown
@@ -92,10 +92,10 @@ namespace CloneHeroSaveGameEditor.Models
             {
                 byteDataList.Add(ScoreStringToBytes(ScoreType3));//todo unknown
                 byteDataList.Add(unknown3_2);//todo unknown
-                byteDataList.Add(Convert.ToByte(Difficulty3));
+                byteDataList.Add(DifficultyStringToBytes(Difficulty3));
                 byteDataList.Add(Convert.ToByte(Percentage3));
                 byteDataList.Add(Convert.ToByte(HasCrown3));
-                byteDataList.Add(unknown3_3);//todo unknown
+                byteDataList.Add(Convert.ToByte(NoteSpeed3));
                 byteDataList.Add(unknown3_4);//todo unknown
                 byteDataList.Add(unknown3_5);//todo unknown
                 byteDataList.Add(unknown3_6);//todo unknown
@@ -116,10 +116,10 @@ namespace CloneHeroSaveGameEditor.Models
             unknown2C = fromBytes[35];
             ScoreType =  ScoreTypeBytesToString(fromBytes[36]);
             unknown2E = fromBytes[37];
-            Difficulty = fromBytes[38];
+            Difficulty = DifficultyBytesToString(fromBytes[38]);
             Percentage = fromBytes[39];
             HasCrown = fromBytes[40].Equals(1);
-            unknown32 = fromBytes[41];
+            NoteSpeed = fromBytes[41];
             unknown33 = fromBytes[42];
             unknown34 = fromBytes[43];
             unknown35 = fromBytes[44];
@@ -130,17 +130,17 @@ namespace CloneHeroSaveGameEditor.Models
             //}
             
 
-            //looks like we have more than just the lead
+            //looks like we have more than just one score
             if (fromBytes.Count > 49)
             {
                 hasSecondScore = true;
 
                 ScoreType2 = ScoreTypeBytesToString(fromBytes[49]);//score type (guitar/bass/etc)
                 unknown3B = fromBytes[50];
-                Difficulty2 = fromBytes[51];
+                Difficulty2 = DifficultyBytesToString(fromBytes[51]);
                 Percentage2 = fromBytes[52];
                 HasCrown2 = fromBytes[53].Equals(1);
-                unknown3F = fromBytes[54];//maybe speed???
+                NoteSpeed2 = fromBytes[54];//note speed
                 unknown40 = fromBytes[55];
                 unknown41 = fromBytes[56];
                 unknown42 = fromBytes[57];
@@ -154,10 +154,10 @@ namespace CloneHeroSaveGameEditor.Models
 
                 ScoreType3 = ScoreTypeBytesToString(fromBytes[62]);
                 unknown3_2 = fromBytes[63];
-                Difficulty3 = fromBytes[64];
+                Difficulty3 = DifficultyBytesToString(fromBytes[64]);
                 Percentage3 = fromBytes[65];
                 HasCrown3 = fromBytes[66].Equals(1);
-                unknown3_3 = fromBytes[67];
+                NoteSpeed3 = fromBytes[67];
                 unknown3_4 = fromBytes[68];
                 unknown3_5 = fromBytes[69];
                 unknown3_6 = fromBytes[70];
@@ -212,6 +212,56 @@ namespace CloneHeroSaveGameEditor.Models
                     break;
                 default:
                     result = Convert.ToByte(score);
+                    break;
+            }
+
+            return result;
+        }
+
+        //00=expert, 01 = hard, 02=medium, 03=easy
+        public static string DifficultyBytesToString(byte score)
+        {
+            var result = Convert.ToString(score);
+            switch (score)
+            {
+                case 0:
+                    result = "expert";
+                    break;
+                case 1:
+                    result = "hard";
+                    break;
+                case 2:
+                    result = "medium";
+                    break;
+                case 3:
+                    result = "easy";
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
+        }
+
+        public static byte DifficultyStringToBytes(string difficulty)
+        {
+            byte result;
+            switch (difficulty)
+            {
+                case "expert":
+                    result = 0;
+                    break;
+                case "hard":
+                    result = 1;
+                    break;
+                case "medium":
+                    result = 2;
+                    break;
+                case "easy":
+                    result = 3;
+                    break;
+                default:
+                    result = Convert.ToByte(difficulty);
                     break;
             }
 

@@ -69,6 +69,32 @@ namespace CloneHeroSaveGameEditor
             return "";
         }
 
+        public static string FindAndBuildUpPath2(byte[] songcachefile, int startingIndex)
+        {
+            List<byte> folderPath = new List<byte>();
+            while (startingIndex > 0 && !songcachefile[startingIndex].Equals(92) && folderPath.Count < 261)//probably no path longer than 260 chars
+            {
+                folderPath.Add(songcachefile[startingIndex]);
+                startingIndex--;
+            }
+
+            if (folderPath.Count > 0)
+            {
+                //we have the full path, convert to text now
+                folderPath.Reverse();
+                folderPath = folderPath.TakeWhile(x => !x.Equals(136)).ToList();
+
+                if (folderPath.Count > 8)
+                {
+                    folderPath = folderPath.Take(folderPath.Count - 7).ToList();
+
+                    return Encoding.Default.GetString(folderPath.ToArray());
+                }
+            }
+
+            return "";
+        }
+
         public static string Enrich(byte[] identifier, byte[] songcachefile)
         {
             if (identifier.Length > 0 && songcachefile.Length>0)
@@ -77,7 +103,9 @@ namespace CloneHeroSaveGameEditor
                 var location = songcachefile.Locate(identifier);
                 if (location != -1)
                 {
-                    return FindAndBuildUpPath(songcachefile, location - 89);
+                    //return FindAndBuildUpPath(songcachefile, location - 89);
+                    //return FindAndBuildUpPath2(songcachefile, location);
+                    return FindAndBuildUpPath2(songcachefile, location-50);
                 }
             }
 

@@ -21,17 +21,28 @@
                 <DataGridTextColumn Header="Song Folder Name" Binding="{Binding SongFolderName}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Play Count" Binding="{Binding PlayCount}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score Type 1" Binding="{Binding ScoreType}" IsReadOnly="False"/>
-                <DataGridTextColumn Header="Difficulty 1" Binding="{Binding Difficulty}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Difficulty 1" IsReadOnly="False">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="Difficulty">
+                            <Binding.ValidationRules>
+                                <local:DifficultyValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Note Speed 1" Binding="{Binding NoteSpeed}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Percentage Score 1" Binding="{Binding Percentage}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Has Crown 1" Binding="{Binding HasCrown}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score 1" Binding="{Binding Score}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score Type 2" Binding="{Binding ScoreType2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Difficulty 2" Binding="{Binding Difficulty2}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Note Speed 2" Binding="{Binding NoteSpeed2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Percentage Score 2" Binding="{Binding Percentage2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Has Crown 2" Binding="{Binding HasCrown2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score 2" Binding="{Binding Score2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score Type 3" Binding="{Binding ScoreType3}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Difficulty 3" Binding="{Binding Difficulty3}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Note Speed 3" Binding="{Binding NoteSpeed3}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Percentage Score 3" Binding="{Binding Percentage3}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Has Crown 3" Binding="{Binding HasCrown3}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score 3" Binding="{Binding Score3}" IsReadOnly="False"/>
