@@ -1,4 +1,5 @@
 # Clone Hero Save Game Editor
+<p><a target="_blank" rel="noopener noreferrer" href="https://raw.githubusercontent.com/matthiasduyck/CloneHeroSaveGameEditor/master/Clone%20Hero%20Save%20Game%20Editor%20Icon.png"><img src="https://raw.githubusercontent.com/matthiasduyck/CloneHeroSaveGameEditor/master/Clone%20Hero%20Save%20Game%20Editor%20Icon.png" width="250" align="right" style="max-width:100%;"></a></p>
 
 <strong>Clone Hero Save Game Editor</strong> is a tiny Windows application to modify your Clone Hero save file.
 
