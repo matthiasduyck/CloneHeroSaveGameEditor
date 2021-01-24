@@ -9,8 +9,8 @@
     <Grid>
         <TextBox Name="txtScoresFile" HorizontalAlignment="Stretch" Height="23" Margin="10,10,155,0" TextWrapping="NoWrap" Text="Scores file" VerticalAlignment="Top" Width="Auto" IsReadOnly="True"/>
         <Button Name="btnSelectFile" Content="Select File" HorizontalAlignment="Right" Height="23" Margin="10,10,10,0" VerticalAlignment="Top" Width="135" Click="BtnSelectScoresFile_Click"/>
-        <TextBox Name="txtSongCache" HorizontalAlignment="Stretch" Height="23" Margin="10,38,155,0" TextWrapping="NoWrap" Text="Song Cache file (optional) TODO" VerticalAlignment="Top" Width="Auto" IsReadOnly="True"/>
-        <Button Name="btnSelectFileSongCache"  Content="Select File TODO" HorizontalAlignment="Right" Margin="10,38,10,0" VerticalAlignment="Top" Width="135" Height="23" Click="BtnSelectFileSongCache_Click"/>
+        <TextBox Name="txtSongCache" HorizontalAlignment="Stretch" Height="23" Margin="10,38,155,0" TextWrapping="NoWrap" Text="Song Cache file (optional) WORK IN PROGRESS" VerticalAlignment="Top" Width="Auto" IsReadOnly="True"/>
+        <Button Name="btnSelectFileSongCache"  Content="Select File WIP" HorizontalAlignment="Right" Margin="10,38,10,0" VerticalAlignment="Top" Width="135" Height="23" Click="BtnSelectFileSongCache_Click"/>
 
         <Button Name="btnRead" Content="Read" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Width="75" Click="BtnRead_Click"/>
         <Button Name="btnWrite"  Content="Write" HorizontalAlignment="Left" Margin="10,10,0,10" VerticalAlignment="Bottom" Width="75" Click="BtnWrite_Click"/>
@@ -33,18 +33,24 @@
                 <DataGridTextColumn Header="Note Speed 1" Binding="{Binding NoteSpeed}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Percentage Score 1" Binding="{Binding Percentage}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Has Crown 1" Binding="{Binding HasCrown}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Stars 1" Binding="{Binding Stars}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Modifiers 1" Binding="{Binding Modifiers}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score 1" Binding="{Binding Score}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score Type 2" Binding="{Binding ScoreType2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Difficulty 2" Binding="{Binding Difficulty2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Note Speed 2" Binding="{Binding NoteSpeed2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Percentage Score 2" Binding="{Binding Percentage2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Has Crown 2" Binding="{Binding HasCrown2}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Stars 2" Binding="{Binding Stars2}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Modifiers 2" Binding="{Binding Modifiers2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score 2" Binding="{Binding Score2}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score Type 3" Binding="{Binding ScoreType3}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Difficulty 3" Binding="{Binding Difficulty3}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Note Speed 3" Binding="{Binding NoteSpeed3}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Percentage Score 3" Binding="{Binding Percentage3}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Has Crown 3" Binding="{Binding HasCrown3}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Stars 3" Binding="{Binding Stars3}" IsReadOnly="False"/>
+                <DataGridTextColumn Header="Modifiers 3" Binding="{Binding Modifiers3}" IsReadOnly="False"/>
                 <DataGridTextColumn Header="Score 3" Binding="{Binding Score3}" IsReadOnly="False"/>
             </DataGrid.Columns>
         </DataGrid>

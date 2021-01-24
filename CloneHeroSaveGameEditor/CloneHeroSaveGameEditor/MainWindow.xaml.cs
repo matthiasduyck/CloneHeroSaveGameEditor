@@ -24,6 +24,7 @@ namespace CloneHeroSaveGameEditor
     public partial class MainWindow : Window
     {
         private byte[] scoresBinFile;
+        private byte[] scoresBinFileOrig;
         private byte[] songCacheBinFile;
         private ScoresData scoresData;
         private string scoresbinFilePath;
@@ -65,6 +66,7 @@ namespace CloneHeroSaveGameEditor
         private ScoresData ReadInScoresBinFile(string filename){
             //todo make more robust
             scoresBinFile = LoadFile(filename);
+            scoresBinFileOrig = LoadFile(filename);
             if (scoresBinFile == null)
             {
                 logger.Log("ERROR - Could not read scores file");
@@ -98,6 +100,19 @@ namespace CloneHeroSaveGameEditor
             }
 
             return new ScoresData(header, listOfLines, logger);//load into data structures
+        }
+
+        private bool IsFileModelCompatible(byte[] input, byte[] output)
+        {
+            if (!input.Length.Equals(output.Length))
+            {
+                return false;
+            }
+            if (!input.SequenceEqual(output))
+            {
+                return false;
+            }
+            return true;
         }
 
         private void ReadInSongCacheBinFile(string filename)
@@ -145,10 +160,23 @@ namespace CloneHeroSaveGameEditor
             }
             else
             {
-                var originalDirectoryPath = System.IO.Path.GetDirectoryName(scoresbinFilePath);
-                var filepath = originalDirectoryPath + "\\scores_modified_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss") + ".bin";
-                logger.Log("Writing out to: " + filepath);
-                SaveBinaryFile(scoresData.GenerateByteData(), filepath);//todo replace with scoresbinfilepath
+                try
+                {
+                    var originalDirectoryPath = System.IO.Path.GetDirectoryName(scoresbinFilePath);
+                    var filepath = originalDirectoryPath + "\\scores_modified_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss") + ".bin";
+                    var backupFilepath = originalDirectoryPath + "\\scores_BACKUP_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss") + ".bin";
+                    logger.Log("Backing up original file to: " + backupFilepath);
+
+                    File.Copy(scoresbinFilePath, backupFilepath, true);
+
+                    logger.Log("Writing out to: " + scoresbinFilePath);
+                    SaveBinaryFile(scoresData.GenerateByteData(), scoresbinFilePath);
+                }
+                catch (IOException iox)
+                {
+                    Console.WriteLine(iox.Message);
+                }
+                
             }
         }
 
@@ -161,15 +189,23 @@ namespace CloneHeroSaveGameEditor
             }
             else
             {
-                if (!string.IsNullOrEmpty(songcachebinFilePath))
-                {
-                    ReadInSongCacheBinFile(songcachebinFilePath);
-                    logger.Log("Enriching song entries with folder path names");
-                    scoresData.ScoreEntries.ForEach(x => x.SongFolderName = FilepathEnricher.Enrich(x.GetSongIdentifierAsBytes(), songCacheBinFile));
-                    logger.Log("Finished enriching song entries with folder path names");
-                }
+                //verify here
+                if (IsFileModelCompatible(scoresBinFileOrig, scoresData.GenerateByteData())){
+                    if (!string.IsNullOrEmpty(songcachebinFilePath))
+                    {
+                        ReadInSongCacheBinFile(songcachebinFilePath);
+                        logger.Log("Enriching song entries with folder path names");
+                        scoresData.ScoreEntries.ForEach(x => x.SongFolderName = FilepathEnricher.Enrich(x.GetSongIdentifierAsBytes(), songCacheBinFile));
+                        logger.Log("Finished enriching song entries with folder path names");
+                    }
 
-                grdScores.ItemsSource = scoresData.ScoreEntries;
+                    grdScores.ItemsSource = scoresData.ScoreEntries;
+                }
+                else
+                {
+                    //provide error message and contact info
+                    logger.Log("Error, the scores file is not compatible with the program, will cause data loss or worse, not loading. Please contact the developer to resolve this mismatch.");
+                }
             }            
         }
 

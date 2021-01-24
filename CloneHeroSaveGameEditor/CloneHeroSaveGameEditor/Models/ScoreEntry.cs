@@ -24,8 +24,8 @@ namespace CloneHeroSaveGameEditor.Models
         //todo 4 hex fields I don't understand yet from 32-35, probably contains some useful data, maybe modifiers?
         public int NoteSpeed { get; set; }
         public byte unknown33 { get; set; }
-        public byte unknown34 { get; set; }
-        public byte unknown35 { get; set; }
+        public int Stars { get; set; }
+        public string Modifiers { get; set; }
         public int Score { get; set; } //hex number from 36 to 39, 4 long, contains score in little endian int32
 
         //second score
@@ -38,8 +38,8 @@ namespace CloneHeroSaveGameEditor.Models
         public bool HasCrown2 { get; set; }
         public int NoteSpeed2 { get; set; }
         public byte unknown40 { get; set; }
-        public byte unknown41 { get; set; }
-        public byte unknown42 { get; set; }
+        public int Stars2 { get; set; }
+        public string Modifiers2 { get; set; }
         public int Score2 { get; set; }
 
         //third score?
@@ -52,8 +52,8 @@ namespace CloneHeroSaveGameEditor.Models
         public bool HasCrown3 { get; set; }
         public int NoteSpeed3 { get; set; }
         public byte unknown3_4 { get; set; }
-        public byte unknown3_5 { get; set; }
-        public byte unknown3_6 { get; set; }
+        public int Stars3 { get; set; }
+        public string Modifiers3 { get; set; }
         public int Score3 { get; set; }
 
         public byte[] ConvertToBytesArray()
@@ -71,8 +71,8 @@ namespace CloneHeroSaveGameEditor.Models
             byteDataList.Add(Convert.ToByte(HasCrown));
             byteDataList.Add(Convert.ToByte(NoteSpeed));
             byteDataList.Add(unknown33);//todo unknown
-            byteDataList.Add(unknown34);//todo unknown
-            byteDataList.Add(unknown35);//todo unknown
+            byteDataList.Add(Convert.ToByte(Stars));//todo unknown
+            byteDataList.Add(ModifiersStringToBytes(Modifiers));//todo unknown
             byteDataList.AddRange(BitConverter.GetBytes(Score));
 
             if (hasSecondScore)
@@ -84,8 +84,8 @@ namespace CloneHeroSaveGameEditor.Models
                 byteDataList.Add(Convert.ToByte(HasCrown2));
                 byteDataList.Add(Convert.ToByte(NoteSpeed2));
                 byteDataList.Add(unknown40);//todo unknown
-                byteDataList.Add(unknown41);//todo unknown
-                byteDataList.Add(unknown42);//todo unknown
+                byteDataList.Add(Convert.ToByte(Stars2));//todo unknown
+                byteDataList.Add(ModifiersStringToBytes(Modifiers2));//todo unknown
                 byteDataList.AddRange(BitConverter.GetBytes(Score2));
             }
             if (hasThirdScore)
@@ -97,8 +97,8 @@ namespace CloneHeroSaveGameEditor.Models
                 byteDataList.Add(Convert.ToByte(HasCrown3));
                 byteDataList.Add(Convert.ToByte(NoteSpeed3));
                 byteDataList.Add(unknown3_4);//todo unknown
-                byteDataList.Add(unknown3_5);//todo unknown
-                byteDataList.Add(unknown3_6);//todo unknown
+                byteDataList.Add(Convert.ToByte(Stars3));//todo unknown
+                byteDataList.Add(ModifiersStringToBytes(Modifiers3));//todo unknown
                 byteDataList.AddRange(BitConverter.GetBytes(Score3));
             }
             
@@ -121,13 +121,10 @@ namespace CloneHeroSaveGameEditor.Models
             HasCrown = fromBytes[40].Equals(1);
             NoteSpeed = fromBytes[41];
             unknown33 = fromBytes[42];
-            unknown34 = fromBytes[43];
-            unknown35 = fromBytes[44];
+            Stars = fromBytes[43];//Stars count
+            Modifiers = ModifiersBytesToString(fromBytes[44]);//modifiers: 1=none, 8=all taps
 
-            //if (fromBytes.Count > 45)
-            //{
-                Score = BitConverter.ToInt32(fromBytes.Skip(45).Take(4).ToArray(), 0);
-            //}
+            Score = BitConverter.ToInt32(fromBytes.Skip(45).Take(4).ToArray(), 0);
             
 
             //looks like we have more than just one score
@@ -142,8 +139,8 @@ namespace CloneHeroSaveGameEditor.Models
                 HasCrown2 = fromBytes[53].Equals(1);
                 NoteSpeed2 = fromBytes[54];//note speed
                 unknown40 = fromBytes[55];
-                unknown41 = fromBytes[56];
-                unknown42 = fromBytes[57];
+                Stars2 = fromBytes[56];//Stars count
+                Modifiers2 = ModifiersBytesToString(fromBytes[57]);
                 Score2 = BitConverter.ToInt32(fromBytes.Skip(58).Take(4).ToArray(), 0);
             }
 
@@ -159,8 +156,8 @@ namespace CloneHeroSaveGameEditor.Models
                 HasCrown3 = fromBytes[66].Equals(1);
                 NoteSpeed3 = fromBytes[67];
                 unknown3_4 = fromBytes[68];
-                unknown3_5 = fromBytes[69];
-                unknown3_6 = fromBytes[70];
+                Stars3 = fromBytes[69];//Stars count
+                Modifiers3 = ModifiersBytesToString(fromBytes[70]);
                 Score3 = BitConverter.ToInt32(fromBytes.Skip(71).Take(4).ToArray(), 0);
             }
         }
@@ -262,6 +259,44 @@ namespace CloneHeroSaveGameEditor.Models
                     break;
                 default:
                     result = Convert.ToByte(difficulty);
+                    break;
+            }
+
+            return result;
+        }
+
+        //01=none, 08 = all taps
+        public static string ModifiersBytesToString(byte modifiers)
+        {
+            var result = Convert.ToString(modifiers);
+            switch (modifiers)
+            {
+                case 1:
+                    result = "none";
+                    break;
+                case 8:
+                    result = "all taps";
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
+        }
+
+        public static byte ModifiersStringToBytes(string modifiers)
+        {
+            byte result;
+            switch (modifiers)
+            {
+                case "none":
+                    result = 1;
+                    break;
+                case "all taps":
+                    result = 8;
+                    break;
+                default:
+                    result = Convert.ToByte(modifiers);
                     break;
             }
 
