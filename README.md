@@ -10,6 +10,8 @@ This project is still in active development/reverse engineer phase
 <g-emoji class="g-emoji" alias="warning" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png">⚠️</g-emoji>
 </h3>
 
+<strong>Currently, when you save the scores file, it is saved as a copy in the same folder. See the console window for details.</strong>
+
 Core functionality, features and UI may still change drastically.
 <strong>You should also expect this program to possibly break/delete/corrupt your save files, proceed with caution, make the needed backups. You have been warned!</strong>
 
