@@ -10,7 +10,12 @@ This project is still in active development/reverse engineer phase
 <g-emoji class="g-emoji" alias="warning" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png">⚠️</g-emoji>
 </h3>
 
+
+
+
 <strong>Currently the editor may not fully support every possible save file (too complex, too many scores,...). The program does a format validation check when reading in your file to validate this. Backup files are created when saving in case something still goes wrong. There is barely any validation in the editor yet, if you mess up the input it will break your file.</strong>
+
+<p><a target="_blank" rel="noopener noreferrer" href="https://raw.githubusercontent.com/matthiasduyck/CloneHeroSaveGameEditor/master/clone%20hero%20save%20game%20editor%20alpha%204%20screenshot.png"><img src="https://raw.githubusercontent.com/matthiasduyck/CloneHeroSaveGameEditor/master/clone%20hero%20save%20game%20editor%20alpha%204%20screenshot.png" style="max-width:100%;"></a></p>
 
 Core functionality, features and UI may still change drastically.
 <strong>You should also expect this program to possibly break/delete/corrupt your save files, proceed with caution, make the needed backups. You have been warned!</strong>
